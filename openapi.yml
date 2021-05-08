@@ -1,0 +1,153 @@
+openapi: 3.0.3
+info:
+  description: This is a simple API documentation for Zemoga's challenge
+  version: 1.0.0
+  title: Zemoga User Portoflio
+  contact:
+    email: fabiansneyder@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: http://localhost:3000
+  description: Local server for test APIs
+paths:
+  /users/{id}/portfolio:
+    get:
+      summary: Get an user portfolio information
+      tags:
+        - "User portfolio"
+      description: This gets all user portfolio data
+      operationId: getUserPortfolio
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: string
+          example: 575375c3
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/UserPortfolio'    
+        '404':
+          description: Unable to find the user portfolio data
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - properties:
+                      code:
+                        type: string
+                        example: 404
+                      message:
+                        type: string
+                        example: Unable to find user with id '575375c3X'
+    put:
+      summary: Update an user portfolio information
+      tags:
+        - "User portfolio"
+      description: This syncs all user portfolio data
+      operationId: updateUserPortfolio
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: string
+          example: 575375c3
+      requestBody:
+        description: User portfolio data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimpleUserPortfolio'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - properties:
+                      data:
+                        type: object
+                        example: {}
+        '404':
+          description: Unable to find the user portfolio data
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - properties:
+                      code:
+                        type: string
+                        example: 404
+                      message:
+                        type: string
+                        example: Unable to find user with id '575375c3X'
+        '422':
+          description: Unable to save the user portfolio data
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - properties:
+                      code:
+                        type: string
+                        example: 422
+                      message:
+                        type: string
+                        example: Unable to save the requeste records, please check the information sent 
+components:
+  schemas:
+    SimpleUserPortfolio:
+      type: object
+      required:
+      - fullname
+      - description
+      properties:
+        fullname:
+          type: string
+          example: Jon Doe
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet
+        image:
+          type: string
+          example: http://path/to/the/image.png
+    UserPortfolio:
+      allOf:
+        - $ref: '#/components/schemas/SimpleUserPortfolio'
+        - properties:
+            userId:
+              type: string
+              example: 575375c3X
+    ApiResponse:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          example: 0
+        message:
+          type: string
+          example: success
+        data:
+          type: object

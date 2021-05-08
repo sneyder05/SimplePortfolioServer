@@ -1,0 +1,16 @@
+[
+  {
+    "userId": "3023b84a",
+    "fullname": "Jon Doe",
+    "description": "Lorem ipsum dolor for Jon",
+    "twitterUserName": "@nodejs",
+    "image": "https://via.placeholder.com/128"
+  },
+  {
+    "userId": "575375c3",
+    "fullname": "Jane Doe",
+    "description": "Lorem ipsum dolor for Jane",
+    "twitterUserName": "@typescript",
+    "image": "https://via.placeholder.com/128"
+  }
+]

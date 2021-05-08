@@ -1,0 +1,15 @@
+node_modules
+.dynamodb
+.build
+coverage
+lib
+test
+
+*.html
+*.yml
+*.json
+*.md
+
+!package.json
+!tsconfig.json
+!serverless.yml

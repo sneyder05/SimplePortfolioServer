@@ -1,0 +1,21 @@
+# Package directories
+node_modules
+jspm_packages
+
+# Compiled directories
+lib
+
+# Serverless directories
+.serverless
+.build
+.nyc_output
+.dynamodb
+s3.bucket
+
+# Test direcotires
+coverage
+
+# Common directories and files
+out-logger.json
+package-lock.json
+.DS_Store

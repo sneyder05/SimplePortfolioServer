@@ -1,0 +1,90 @@
+service: simple-portfolio-app
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  environment:
+    NODE_ENV: dev
+    DYNAMO_USER_TABLE: user-${opt:stage, self:provider.stage}
+    TWITTER_API_CONSUMER_KEY: YGd5cRlaAM7PwRJWecVjA8aTM
+    TWITTER_API_CONSUMER_SECRET: xkXHOb4xxg6unAu2hXByUCUgVqOiA7ehjyrHD8DWEJ5ikgw6yF
+    TWITTER_API_BEARER_TOKEN: AAAAAAAAAAAAAAAAAAAAANcjPQEAAAAAJPUYItA%2BhsyteybIEzFRzFO%2FS7g%3DxZlF5PkpxB1Y2ajxyie6GV87qNHE8yWToqiO3CFNymy5Jq1zCr
+    TWITTER_USER_TIMELINE_DEF_QTY: 5
+    S3_BUCKET_NAME: s3.bucket
+  stage: dev
+  region: us-east-2
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-dynamodb-local
+  - serverless-s3-local
+  - serverless-offline
+package:
+  exclude:
+    - config/.env.stg
+    - config/.env.pro
+  include:
+    - config/.env.dev
+
+custom:
+  serverless-offline:
+    host: 0.0.0.0
+  s3:
+    host: 0.0.0.0
+    address: 0.0.0.0
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      convertEmptyValues: true
+      seed: true
+    seed:
+      domain:
+        sources:
+          - table: ${self:provider.environment.DYNAMO_USER_TABLE}
+            sources: [./dynamo/seeds/users.seed.json]
+
+functions:
+  getPortfolio:
+    handler: app/handlers/user.get
+    events:
+      - http:
+          path: users/{id}/portfolio
+          method: get
+  updatePortfolio:
+    handler: app/handlers/user.update
+    events:
+      - http:
+          path: users/{id}/portfolio
+          method: put
+  getUserTweets:
+    handler: app/handlers/user.getTwitterTimeline
+    events:
+      - http:
+          path: users/{id}/tweets/{count?}
+          method: get
+
+resources:
+  Resources:
+    Pictures:
+      Type: 'AWS::S3::Bucket'
+      Properties:
+        BucketName: ${self:provider.environment.S3_BUCKET_NAME}
+    UserDynampDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:provider.environment.DYNAMO_USER_TABLE}
+        AttributeDefinitions:
+          -
+            AttributeName: 'userId'
+            AttributeType: 'S'
+        KeySchema:
+          -
+            AttributeName: 'userId'
+            KeyType: 'HASH'
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
