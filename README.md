@@ -43,6 +43,21 @@ Open a terminal at the root app folder and use one of the following options to s
 1. Run the command `docker compose down` as long as you started the app with the previous option `1`.
 2. Run the keys combination `Ctrl + C` as long as you started the app with the previous options `2`.
 
+### Run whitout Docker
+
+Make sure you have the same/higher version of the following tools:
+* `node@12.x.x`
+* `npm@6.x.x`
+
+If you want run the app avoiding to use docker, please follow the steps below at the **root app folder**:
+
+* `npm install -g serverless@1.83.3`: Install Serverless framework.
+* `npm install`: Install all dependencies.
+* `serverless dynamodb install`: Install DynamoDb serverless plugin.
+* `serverless plugin install --name serverless-s3-local`: Install S3 serverless plugin.
+* `npm run build`: Check if there are errors.
+* `npm start`: Run the app.
+
 ## Testing
 
 ### Testing the code
