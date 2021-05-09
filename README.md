@@ -14,9 +14,10 @@ Simple Portfolio App is a basic example at how to use Serverless architecture fo
 - [Jest](https://jestjs.io/)
 - [Docker](https://docs.docker.com/get-docker/)
 - [OpenApi3](https://swagger.io/specification/)
+- [ESLint](https://eslint.org/)
 
 ### Time spent
-This app took around `18` hours.
+This app took around `20` hours.
 
 ## Deploy
 

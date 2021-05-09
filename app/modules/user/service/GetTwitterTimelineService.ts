@@ -16,7 +16,8 @@ export class GetUserTwitterTimelineService {
     const data = await TwitterGetUserTimelineController.get(nick, maxRecords)
 
     if (data && Object.keys(data).length) {
-      const tweets = (data as GenericObject[]).map(item => Utilities.pick(item, [ 'text', 'user.name', ]) as Tweet)
+      const pickKeys = [ 'text', 'user.name', 'entities.user_mentions[0].screen_name', 'entities.user_mentions[0].name', ]
+      const tweets = (data as GenericObject[]).map(item => Utilities.pick(item, pickKeys) as Tweet)
 
       return tweets
     }
